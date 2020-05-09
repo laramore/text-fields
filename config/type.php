@@ -4,10 +4,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default uuid types
+    | Default text types
     |--------------------------------------------------------------------------
     |
-    | This option defines the default uuid types used by fields.
+    | This option defines the default text types used by fields.
     |
     */
 
