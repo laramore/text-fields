@@ -30,15 +30,21 @@ return [
         'name' => [
             'type' => 'composed',
             'max_length' => (Schema::getFacadeRoot()::$defaultStringLength * 2) + 1,
-            'name_first' => true,
+            'lastname_first' => true,
             'fields' => [
-                'firstname' => Laramore\Fields\FirstName::class,
                 'lastname' => Laramore\Fields\LastName::class,
+                'firstname' => Laramore\Fields\FirstName::class,
             ],
             'templates' => [
-                'firstname' => 'first${name}',
                 'lastname' => 'last${name}',
+                'firstname' => 'first${name}',
             ],
+            'patterns' => [ // Based also on https://www.utf8-chartable.de/.
+                // Based on https://www.compart.com/en/unicode/category/Lu.
+                'lastname' => '([A-ZÀ-ÖØ-Þ]+(?> [A-ZÀ-ÖØ-Þ]+)*)',
+                // https://www.compart.com/en/unicode/category/Ll.
+                'firstname' => '((?>[A-ZÀ-ÖØ-Þ][a-zß-öø-ÿ]+)(?> [A-ZÀ-ÖØ-Þ][a-zß-öø-ÿ]+)?)',
+            ]
         ],
         'slug' => [
             'type' => 'slug',

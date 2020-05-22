@@ -12,12 +12,12 @@ namespace Laramore\Fields;
 
 use Illuminate\Support\Collection;
 use Laramore\Contracts\{
-    Eloquent\LaramoreModel, Eloquent\LaramoreBuilder, Field\Field, Field\ExtraField
+    Eloquent\LaramoreModel, Eloquent\LaramoreBuilder, Field\Field, Field\ExtraField, Field\PatternField
 };
 use Laramore\Elements\OperatorElement;
 use Laramore\Traits\Field\ModelExtra;
 
-class Name extends BaseComposed implements ExtraField
+class Name extends BaseComposed implements ExtraField, PatternField
 {
     use ModelExtra {
         ModelExtra::set as protected setValue;
@@ -25,11 +25,11 @@ class Name extends BaseComposed implements ExtraField
     }
 
     /**
-     * Structure with the name in first.
+     * Structure with the last name in first.
      *
      * @var bool
      */
-    protected $nameFirst;
+    protected $lastnameFirst;
 
     /**
      * Define the max length.
@@ -81,6 +81,29 @@ class Name extends BaseComposed implements ExtraField
     {
         return $value;
     }
+
+    /**
+     * Return the pattern to match.
+     *
+     * @return string
+     */
+    public function getPattern(): string
+    {
+        return $this->lastnameFirst
+            ? "/^{$this->getConfig('patterns.lastname')} {$this->getConfig('patterns.firstname')}$/"
+            : "/^{$this->getConfig('patterns.firstname')} {$this->getConfig('patterns.lastname')}$/";
+    }
+
+    /**
+     * Return all pattern flags
+     *
+     * @return mixed
+     */
+    public function getPatternFlags()
+    {
+        return $this->getConfig('patterns.flags');
+    }
+
 
     /**
      * Add a where null condition from this field.
@@ -223,11 +246,7 @@ class Name extends BaseComposed implements ExtraField
 
     public function split($value)
     {
-        if ($this->nameFirst) {
-            $matched = \preg_match('/(\w+) ((\w+ *)+)/', $value, $matches);
-        } else {
-            $matched = \preg_match('/((\w+ *)+) (\w+)/', $value, $matches);
-        }
+        $matched = \preg_match($this->getPattern(), $value, $matches, $this->getPatternFlags());
 
         if (!$matched) {
             throw new \Exception("The value `$value` is not a valid name");
@@ -238,7 +257,7 @@ class Name extends BaseComposed implements ExtraField
 
     public function join($lastname, $firstname): string
     {
-        if ($this->nameFirst) {
+        if ($this->lastnameFirst) {
             return $lastname.' '.$firstname;
         }
 
