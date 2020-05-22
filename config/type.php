@@ -12,13 +12,45 @@ return [
     */
 
     'configurations' => [
-        'name' => [
-            'native' => 'name',
+        'first_name' => [
+            'native' => 'first_name',
             'default_options' => [
-                'visible', 'fillable', 'required',
+                'visible', 'fillable', 'required', 'title'
             ],
-            'migration_name' => null,
-            'factory_name' => null,
+            'migration_name' => 'char',
+            'migration_property_keys' => [
+                'length:maxLength', 'nullable', 'default',
+            ],
+        ],
+        'last_name' => [
+            'native' => 'last_name',
+            'default_options' => [
+                'visible', 'fillable', 'required', 'uppercase'
+            ],
+            'migration_name' => 'char',
+            'migration_property_keys' => [
+                'length:maxLength', 'nullable', 'default',
+            ],
+        ],
+        'slug' => [
+            'native' => 'slug',
+            'default_options' => [
+                'visible', 'fillable', 'required', 'slug'
+            ],
+            'migration_name' => 'char',
+            'migration_property_keys' => [
+                'length:maxLength', 'nullable', 'default',
+            ],
+        ],
+        'title' => [
+            'native' => 'title',
+            'default_options' => [
+                'visible', 'fillable', 'required', 'title'
+            ],
+            'migration_name' => 'char',
+            'migration_property_keys' => [
+                'length:maxLength', 'nullable', 'default',
+            ],
         ],
     ],
 

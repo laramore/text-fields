@@ -24,7 +24,18 @@ class Name extends BaseComposed implements ExtraField
         ModelExtra::reset as protected resetValue;
     }
 
-    protected $nameFirst = true;
+    /**
+     * Structure with the name in first.
+     *
+     * @var bool
+     */
+    protected $nameFirst;
+
+    /**
+     * Define the max length.
+     *
+     * @var integer
+     */
     protected $maxLength;
 
     /**
@@ -83,6 +94,7 @@ class Name extends BaseComposed implements ExtraField
     public function whereNull(LaramoreBuilder $builder, $value=null, string $boolean='and', bool $not=false): LaramoreBuilder
     {
         $builder = $this->getField('firstname')->addBuilderOperation($builder, 'whereNull', null, $boolean, $not);
+
         return $this->getField('lastname')->addBuilderOperation($builder, 'whereNull', $boolean, $not);
     }
 
@@ -110,7 +122,10 @@ class Name extends BaseComposed implements ExtraField
      */
     public function whereIn(LaramoreBuilder $builder, Collection $value=null, string $boolean='and', bool $notIn=false): LaramoreBuilder
     {
+        
+        $builder = $this->getField('firstname')->addBuilderOperation($builder, 'whereNull', null, $boolean, $not);
 
+        return $this->getField('lastname')->addBuilderOperation($builder, 'whereNull', $boolean, $not);
     }
 
     /**
@@ -209,9 +224,9 @@ class Name extends BaseComposed implements ExtraField
     public function split($value)
     {
         if ($this->nameFirst) {
-            $matched = \preg_match('/([A-Z _-]+) (([A-Z][a-z_-]+ *)+)/', $value, $matches);
+            $matched = \preg_match('/(\w+) ((\w+ *)+)/', $value, $matches);
         } else {
-            $matched = \preg_match('/(([A-Z][a-z_-]+ *)+) ([A-Z _-]+)/', $value, $matches);
+            $matched = \preg_match('/((\w+ *)+) (\w+)/', $value, $matches);
         }
 
         if (!$matched) {
@@ -229,5 +244,10 @@ class Name extends BaseComposed implements ExtraField
 
         return $firstname.' '.$lastname;
 
+    }
+
+    public function generate(): string
+    {
+        return $this->join($this->getField('lastname')->generate(), $this->getField('firstname')->generate());
     }
 }
