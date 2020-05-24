@@ -1,10 +1,10 @@
 <?php
 /**
- * Define an uuid OneToMany field.
+ * Define a name field.
  *
  * @author Samy Nastuzzi <samy@nastuzzi.fr>
  *
- * @copyright Copyright (c) 2019
+ * @copyright Copyright (c) 2020
  * @license MIT
  */
 
@@ -15,6 +15,7 @@ use Laramore\Contracts\{
     Eloquent\LaramoreModel, Eloquent\LaramoreBuilder, Field\Field, Field\ExtraField, Field\PatternField
 };
 use Laramore\Elements\OperatorElement;
+use Laramore\Facades\Operator;
 use Laramore\Traits\Field\ModelExtra;
 
 class Name extends BaseComposed implements ExtraField, PatternField
@@ -89,9 +90,11 @@ class Name extends BaseComposed implements ExtraField, PatternField
      */
     public function getPattern(): string
     {
-        return $this->lastnameFirst
-            ? "/^{$this->getConfig('patterns.lastname')} {$this->getConfig('patterns.firstname')}$/"
-            : "/^{$this->getConfig('patterns.firstname')} {$this->getConfig('patterns.lastname')}$/";
+        if ($this->lastnameFirst) {
+            return "/^{$this->getConfig('patterns.lastname')} {$this->getConfig('patterns.firstname')}$/";
+        }
+
+        return "/^{$this->getConfig('patterns.firstname')} {$this->getConfig('patterns.lastname')}$/";
     }
 
     /**
@@ -103,7 +106,6 @@ class Name extends BaseComposed implements ExtraField, PatternField
     {
         return $this->getConfig('patterns.flags');
     }
-
 
     /**
      * Add a where null condition from this field.
@@ -143,12 +145,21 @@ class Name extends BaseComposed implements ExtraField, PatternField
      * @param  boolean         $notIn
      * @return LaramoreBuilder
      */
-    public function whereIn(LaramoreBuilder $builder, Collection $value=null, string $boolean='and', bool $notIn=false): LaramoreBuilder
+    public function whereIn(LaramoreBuilder $builder, Collection $value=null,
+                            string $boolean='and', bool $notIn=false): LaramoreBuilder
     {
-        
-        $builder = $this->getField('firstname')->addBuilderOperation($builder, 'whereNull', null, $boolean, $not);
+        $operator = $notIn ? Operator::equal() : Operator::different();
 
-        return $this->getField('lastname')->addBuilderOperation($builder, 'whereNull', $boolean, $not);
+        return $builder->where(function ($builder) use ($value, $notIn, $operator) {
+            foreach ($value as $name) {
+                [$lastname, $firstname] = $this->split($name);
+
+                $builder->where(function ($subBuilder) use ($lastname, $firstname, $operator) {
+                    $this->getField('lastname')->addBuilderOperation($subBuilder, 'where', $operator, $lastname, 'and');
+                    $this->getField('firstname')->addBuilderOperation($subBuilder, 'where', $operator, $firstname, 'and');
+                }, $notIn ? 'and' : 'or');
+            }
+        }, $boolean);
     }
 
     /**
@@ -161,7 +172,7 @@ class Name extends BaseComposed implements ExtraField, PatternField
      */
     public function whereNotIn(LaramoreBuilder $builder, Collection $value=null, string $boolean='and'): LaramoreBuilder
     {
-
+        return $this->whereIn($builder, $value, $boolean, true);
     }
 
     /**
@@ -173,9 +184,15 @@ class Name extends BaseComposed implements ExtraField, PatternField
      * @param  string          $boolean
      * @return LaramoreBuilder
      */
-    public function where(LaramoreBuilder $builder, OperatorElement $operator, $value=null, string $boolean='and'): LaramoreBuilder
+    public function where(LaramoreBuilder $builder, OperatorElement $operator,
+                          $value=null, string $boolean='and'): LaramoreBuilder
     {
+        [$lastname, $firstname] = $this->split($name);
 
+        return $builder->where(function ($subBuilder) use ($lastname, $firstname) {
+            $this->getField('lastname')->addBuilderOperation($subBuilder, 'where', $lastname, 'and');
+            $this->getField('firstname')->addBuilderOperation($subBuilder, 'where', $firstname, 'and');
+        }, $boolean);
     }
 
     /**
@@ -244,7 +261,13 @@ class Name extends BaseComposed implements ExtraField, PatternField
         return $result;
     }
 
-    public function split($value)
+    /**
+     * Split last and first names.
+     *
+     * @param string $value
+     * @return array
+     */
+    public function split(string $value): array
     {
         $matched = \preg_match($this->getPattern(), $value, $matches, $this->getPatternFlags());
 
@@ -255,7 +278,14 @@ class Name extends BaseComposed implements ExtraField, PatternField
         return [$matches[1], $matches[2]];
     }
 
-    public function join($lastname, $firstname): string
+    /**
+     * Join last and first names.
+     *
+     * @param string $lastname
+     * @param string $firstname
+     * @return string
+     */
+    public function join(string $lastname, string $firstname): string
     {
         if ($this->lastnameFirst) {
             return $lastname.' '.$firstname;
@@ -265,6 +295,12 @@ class Name extends BaseComposed implements ExtraField, PatternField
 
     }
 
+    /**
+     * Generate a name.
+     * For factories.
+     *
+     * @return string
+     */
     public function generate(): string
     {
         return $this->join($this->getField('lastname')->generate(), $this->getField('firstname')->generate());

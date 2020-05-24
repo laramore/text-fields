@@ -54,21 +54,45 @@ class Body extends Char
         return $value;
     }
 
+    /**
+     * Uppercase the value.
+     *
+     * @param string $value
+     * @return string
+     */
     public function uppercase(string $value): string
     {
         return Str::upper($value);
     }
 
+    /**
+     * Lowercase the value.
+     *
+     * @param string $value
+     * @return string
+     */
     public function lowercase(string $value): string
     {
         return Str::lower($value);
     }
 
+    /**
+     * Title the value.
+     *
+     * @param string $value
+     * @return string
+     */
     public function title(string $value): string
     {
         return Str::title($value);
     }
 
+    /**
+     * Slug the value.
+     *
+     * @param string $value
+     * @return string
+     */
     public function slug(string $value): string
     {
         return Str::slug($value);
