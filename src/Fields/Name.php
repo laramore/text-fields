@@ -40,6 +40,18 @@ class Name extends BaseComposed implements ExtraField, PatternField
     protected $maxLength;
 
     /**
+     * Indicate if the field has a value.
+     *
+     * @param  LaramoreModel $model
+     * @return mixed
+     */
+    public function has(LaramoreModel $model)
+    {
+        return $this->getField('lastname')->has($model)
+            && $this->getField('firstname')->has($model);
+    }
+
+    /**
      * Dry the value in a simple format.
      *
      * @param  mixed $value
@@ -203,7 +215,14 @@ class Name extends BaseComposed implements ExtraField, PatternField
      */
     public function retrieve(LaramoreModel $model)
     {
-        return $this->join($this->getField('lastname')->get($model), $this->getField('firstname')->get($model));
+        $lastname = $this->getField('lastname')->get($model);
+        $firstname = $this->getField('firstname')->get($model);
+
+        if (\is_null($lastname) || \is_null($firstname)) {
+            return null;
+        }
+
+        return $this->join($lastname, $firstname);
     }
 
     /**
