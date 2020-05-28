@@ -16,6 +16,13 @@ use Laramore\Facades\Option;
 class Body extends Char
 {
     /**
+     * Separator for slug values.
+     *
+     * @var string
+     */
+    protected $separator;
+
+    /**
      * Transform the value to correspond to the field desire.
      *
      * @param  mixed $value
@@ -91,11 +98,12 @@ class Body extends Char
      * Slug the value.
      *
      * @param string $value
+     * @param string $separator
      * @return string
      */
-    public function slug(string $value): string
+    public function slug(string $value, string $separator=null): string
     {
-        return Str::slug($value);
+        return Str::slug($value, $separator ?: $this->separator);
     }
 
     /**

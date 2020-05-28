@@ -54,6 +54,11 @@ return [
             'type' => 'title',
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
         ],
+        'translate' => [
+            'type' => 'slug',
+            'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
+            'separator' => '.',
+        ],
     ],
     
 ];
