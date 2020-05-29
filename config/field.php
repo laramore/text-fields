@@ -50,6 +50,9 @@ return [
             'type' => 'slug',
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
         ],
+        'text_enum' => [
+            'type' => 'char',
+        ],
         'title' => [
             'type' => 'title',
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
