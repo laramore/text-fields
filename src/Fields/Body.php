@@ -46,7 +46,7 @@ class Body extends Char
             $value = $this->slug($value);
         }
 
-        if ($this->maxLength < strlen($value) && !is_null($value)) {
+        if ($this->maxLength < \strlen($value) && !\is_null($value)) {
             $dots = $this->hasOption(Option::dotsOnResize()) ? '...' : '';
 
             if ($this->hasOption(Option::caracterResize())) {
@@ -103,7 +103,13 @@ class Body extends Char
      */
     public function slug(string $value, string $separator=null): string
     {
-        return Str::slug($value, $separator ?: $this->separator);
+        $separator = $separator ?: $this->separator;
+
+        if (\is_null($separator)) {
+            return Str::slug($value);
+        }
+
+        return Str::slug($value, $separator);
     }
 
     /**
