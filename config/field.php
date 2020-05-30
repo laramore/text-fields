@@ -43,7 +43,9 @@ return [
                 // Based on https://www.compart.com/en/unicode/category/Lu.
                 'lastname' => '([A-ZÀ-ÖØ-Þ]+(?> [A-ZÀ-ÖØ-Þ]+)*)',
                 // https://www.compart.com/en/unicode/category/Ll.
-                'firstname' => '((?>[A-ZÀ-ÖØ-Þ][a-zß-öø-ÿ]+)(?> [A-ZÀ-ÖØ-Þ][a-zß-öø-ÿ]+)?)',
+                'firstname' => '((?>[A-ZÀ-ÖØ-Þ][a-zß-öø-ÿ]+)(?> [A-ZÀ-ÖØ-Þc][a-zß-öø-ÿ]+)*)',
+                'lastname_first' => '/^${lastname} ${firstname}$/u',
+                'firstname_first' => '/^${firstname} ${lastname}$/u',
             ]
         ],
         'slug' => [

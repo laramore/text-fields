@@ -10,7 +10,9 @@
 
 namespace Laramore\Fields;
 
-use Illuminate\Support\Collection;
+use Illuminate\Support\{
+    Str, Collection
+};
 use Laramore\Contracts\{
     Eloquent\LaramoreModel, Eloquent\LaramoreBuilder, Field\Field, Field\ExtraField, Field\PatternField
 };
@@ -102,11 +104,12 @@ class Name extends BaseComposed implements ExtraField, PatternField
      */
     public function getPattern(): string
     {
-        if ($this->lastnameFirst) {
-            return "/^{$this->getConfig('patterns.lastname')} {$this->getConfig('patterns.firstname')}$/";
-        }
+        $template = $this->getConfig($this->lastnameFirst ? 'patterns.lastname_first' : 'patterns.firstname_first');
 
-        return "/^{$this->getConfig('patterns.firstname')} {$this->getConfig('patterns.lastname')}$/";
+        return Str::replaceInTemplate($template, [
+            'lastname' => $this->getConfig('patterns.lastname'),
+            'firstname' => $this->getConfig('patterns.firstname'),
+        ]);
     }
 
     /**
@@ -322,6 +325,12 @@ class Name extends BaseComposed implements ExtraField, PatternField
      */
     public function generate(): string
     {
-        return $this->join($this->getField('lastname')->generate(), $this->getField('firstname')->generate());
+        $lastname = $this->getField('lastname');
+        $firstname = $this->getField('firstname');
+
+        return $this->join(
+            $lastname->transform($lastname->generate()),
+            $firstname->transform($firstname->generate())
+        );
     }
 }
