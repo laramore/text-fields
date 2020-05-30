@@ -43,7 +43,7 @@ class TextEnum extends Enum
 
     /**
      * During locking, define the max length if it is not.
-     * 
+     *
      * @return void
      */
     public function locking()
