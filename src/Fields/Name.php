@@ -203,7 +203,7 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
     public function where(LaramoreBuilder $builder, OperatorElement $operator,
                           $value=null, string $boolean='and'): LaramoreBuilder
     {
-        [$lastname, $firstname] = $this->split($name);
+        [$lastname, $firstname] = $this->split($value);
 
         return $builder->where(function ($subBuilder) use ($lastname, $firstname) {
             $this->getField('lastname')->addBuilderOperation($subBuilder, 'where', $lastname, 'and');
