@@ -53,7 +53,7 @@ return [
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
         ],
         'text_enum' => [
-            'type' => 'char',
+            'type' => 'text_enum',
         ],
         'title' => [
             'type' => 'title',

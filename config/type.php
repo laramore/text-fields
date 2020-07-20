@@ -52,6 +52,17 @@ return [
                 'length:maxLength', 'nullable', 'default',
             ],
         ],
+        'text_enum' => [
+            'native' => 'text_enum',
+            'default_options' => [
+                'visible', 'fillable', 'required',
+            ],
+            'migration_name' => 'char',
+            'migration_property_keys' => [
+                'length:maxLength', 'nullable', 'default',
+            ],
+            'factory_name' => 'enum',
+        ],
     ],
 
 ];

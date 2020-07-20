@@ -10,19 +10,20 @@
 
 namespace Laramore\Fields;
 
-use Illuminate\Support\{
-    Str, Collection
-};
+use Illuminate\Support\Str;
 use Laramore\Contracts\{
-    Eloquent\LaramoreModel, Eloquent\LaramoreBuilder, Field\Field, Field\ExtraField, Field\PatternField
+    Eloquent\LaramoreModel, Eloquent\LaramoreBuilder, Eloquent\LaramoreCollection,
+    Field\Field, Field\ExtraField, Field\PatternField, Field\Constraint\IndexableField
 };
 use Laramore\Elements\OperatorElement;
 use Laramore\Facades\Operator;
-use Laramore\Traits\Field\ModelExtra;
+use Laramore\Traits\Field\{
+    ModelExtra, IndexableConstraints
+};
 
-class Name extends BaseComposed implements ExtraField, PatternField
+class Name extends BaseComposed implements ExtraField, PatternField, IndexableField
 {
-    use ModelExtra {
+    use ModelExtra, IndexableConstraints {
         ModelExtra::set as protected setValue;
         ModelExtra::reset as protected resetValue;
     }
@@ -44,10 +45,10 @@ class Name extends BaseComposed implements ExtraField, PatternField
     /**
      * Indicate if the field has a value.
      *
-     * @param  LaramoreModel $model
+     * @param LaramoreModel|array|\ArrayAccess $model
      * @return mixed
      */
-    public function has(LaramoreModel $model)
+    public function has($model)
     {
         return $this->getField('lastname')->has($model)
             && $this->getField('firstname')->has($model);
@@ -65,6 +66,17 @@ class Name extends BaseComposed implements ExtraField, PatternField
     }
 
     /**
+     * Hydrate the value in a simple format.
+     *
+     * @param  mixed $value
+     * @return mixed
+     */
+    public function hydrate($value)
+    {
+        return is_null($value) ? $value : (string) $value;
+    }
+
+    /**
      * Cast the value in the correct format.
      *
      * @param  mixed $value
@@ -73,17 +85,6 @@ class Name extends BaseComposed implements ExtraField, PatternField
     public function cast($value)
     {
         return is_null($value) ? $value : (string) $value;
-    }
-
-    /**
-     * Transform the value to correspond to the field desire.
-     *
-     * @param  mixed $value
-     * @return mixed
-     */
-    public function transform($value)
-    {
-        return $value;
     }
 
     /**
@@ -154,13 +155,13 @@ class Name extends BaseComposed implements ExtraField, PatternField
     /**
      * Add a where in condition from this field.
      *
-     * @param  LaramoreBuilder $builder
-     * @param  Collection      $value
-     * @param  string          $boolean
-     * @param  boolean         $notIn
+     * @param  LaramoreBuilder    $builder
+     * @param  LaramoreCollection $value
+     * @param  string             $boolean
+     * @param  boolean            $notIn
      * @return LaramoreBuilder
      */
-    public function whereIn(LaramoreBuilder $builder, Collection $value=null,
+    public function whereIn(LaramoreBuilder $builder, LaramoreCollection $value=null,
                             string $boolean='and', bool $notIn=false): LaramoreBuilder
     {
         $operator = $notIn ? Operator::equal() : Operator::different();
@@ -180,12 +181,12 @@ class Name extends BaseComposed implements ExtraField, PatternField
     /**
      * Add a where not in condition from this field.
      *
-     * @param  LaramoreBuilder $builder
-     * @param  Collection      $value
-     * @param  string          $boolean
+     * @param  LaramoreBuilder    $builder
+     * @param  LaramoreCollection $value
+     * @param  string             $boolean
      * @return LaramoreBuilder
      */
-    public function whereNotIn(LaramoreBuilder $builder, Collection $value=null, string $boolean='and'): LaramoreBuilder
+    public function whereNotIn(LaramoreBuilder $builder, LaramoreCollection $value=null, string $boolean='and'): LaramoreBuilder
     {
         return $this->whereIn($builder, $value, $boolean, true);
     }
@@ -211,32 +212,13 @@ class Name extends BaseComposed implements ExtraField, PatternField
     }
 
     /**
-     * Retrieve the value definied by the field.
-     *
-     * @param  LaramoreModel $model
-     * @return mixed
-     */
-    public function retrieve(LaramoreModel $model)
-    {
-        $lastname = $this->getField('lastname')->get($model);
-        $firstname = $this->getField('firstname')->get($model);
-
-        if (\is_null($lastname) || \is_null($firstname)) {
-            return null;
-        }
-
-        return $this->join($lastname, $firstname);
-    }
-
-    /**
      * Use the relation to set the other field values.
      *
-     * @param  LaramoreModel $model
-     * @param  mixed         $value
-     *
+     * @param LaramoreModel|array|\ArrayAccess $model
+     * @param  mixed                            $value
      * @return mixed
      */
-    public function set(LaramoreModel $model, $value)
+    public function set($model, $value)
     {
         [$lastname, $firstname] = $this->split($value);
 
@@ -249,36 +231,52 @@ class Name extends BaseComposed implements ExtraField, PatternField
     /**
      * Reset the value for the field.
      *
-     * @param  LaramoreModel $model
+     * @param LaramoreModel|array|\ArrayAccess $model
      * @return mixed
      */
-    public function reset(LaramoreModel $model)
+    public function reset($model)
     {
         $this->getField('lastname')->reset($model);
         $this->getField('firstname')->reset($model);
 
         if ($this->hasDefault()) {
-            $model->setExtraValue($this->getNative(), $value = $this->getDefault());
-
-            return $value;
+            return $this->setValue($model, $this->getDefault());
         }
 
         return $this->resetValue($model);
     }
 
     /**
-     * Return the set value for a specific field.
-     * z
-     * @param Field         $field
-     * @param LaramoreModel $model
-     * @param mixed         $value
+     * Retrieve the value definied by the field.
+     *
+     * @param LaramoreModel|array|\ArrayAccess $model
      * @return mixed
      */
-    public function setFieldValue(Field $field, LaramoreModel $model, $value)
+    public function retrieve($model)
+    {
+        $lastname = $this->getField('lastname')->get($model);
+        $firstname = $this->getField('firstname')->get($model);
+
+        if (\is_null($lastname) || \is_null($firstname)) {
+            return null;
+        }
+
+        return $this->join($lastname, $firstname);
+    }
+
+    /**
+     * Return the set value for a specific field.
+     *
+     * @param Field                            $field
+     * @param LaramoreModel|array|\ArrayAccess $model
+     * @param mixed                            $value
+     * @return mixed
+     */
+    public function setFieldValue(Field $field, $model, $value)
     {
         $result = parent::setFieldValue($field, $model, $value);
 
-        $model->setExtraValue($this->getNative(), $this->retrieve($model));
+        $this->setValue($model, $this->retrieve($model));
 
         return $result;
     }
@@ -329,8 +327,8 @@ class Name extends BaseComposed implements ExtraField, PatternField
         $firstname = $this->getField('firstname');
 
         return $this->join(
-            $lastname->transform($lastname->generate()),
-            $firstname->transform($firstname->generate())
+            $lastname->cast($lastname->generate()),
+            $firstname->cast($firstname->generate())
         );
     }
 }

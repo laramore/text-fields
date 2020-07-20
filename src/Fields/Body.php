@@ -23,18 +23,18 @@ class Body extends Char
     protected $separator;
 
     /**
-     * Transform the value to correspond to the field desire.
+     * Cast the value to correspond to the field desire.
      *
      * @param  mixed $value
      * @return mixed
      */
-    public function transform($value)
+    public function cast($value)
     {
         if (\is_null($value)) {
             return $value;
         }
 
-        $value = parent::transform($value);
+        $value = parent::cast($value);
 
         if ($this->hasOption(Option::uppercase())) {
             $value = $this->uppercase($value);
