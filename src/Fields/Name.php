@@ -10,9 +10,11 @@
 
 namespace Laramore\Fields;
 
-use Illuminate\Support\Str;
+use Illuminate\Support\{
+    Str, Collection
+};
 use Laramore\Contracts\{
-    Eloquent\LaramoreModel, Eloquent\LaramoreBuilder, Eloquent\LaramoreCollection,
+    Eloquent\LaramoreModel, Eloquent\LaramoreBuilder,
     Field\Field, Field\ExtraField, Field\PatternField, Field\Constraint\IndexableField
 };
 use Laramore\Elements\OperatorElement;
@@ -127,12 +129,11 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
      * Add a where null condition from this field.
      *
      * @param  LaramoreBuilder $builder
-     * @param  mixed           $value
      * @param  string          $boolean
      * @param  boolean         $not
      * @return LaramoreBuilder
      */
-    public function whereNull(LaramoreBuilder $builder, $value=null, string $boolean='and', bool $not=false): LaramoreBuilder
+    public function whereNull(LaramoreBuilder $builder, string $boolean='and', bool $not=false): LaramoreBuilder
     {
         $builder = $this->getField('firstname')->addBuilderOperation($builder, 'whereNull', null, $boolean, $not);
 
@@ -143,25 +144,24 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
      * Add a where not null condition from this field.
      *
      * @param  LaramoreBuilder $builder
-     * @param  mixed           $value
      * @param  string          $boolean
      * @return LaramoreBuilder
      */
-    public function whereNotNull(LaramoreBuilder $builder, $value=null, string $boolean='and'): LaramoreBuilder
+    public function whereNotNull(LaramoreBuilder $builder, string $boolean='and'): LaramoreBuilder
     {
-        return $this->whereNull($builder, $value, $boolean, true);
+        return $this->whereNull($builder, $boolean, true);
     }
 
     /**
      * Add a where in condition from this field.
      *
      * @param  LaramoreBuilder    $builder
-     * @param  LaramoreCollection $value
+     * @param  Collection $value
      * @param  string             $boolean
      * @param  boolean            $notIn
      * @return LaramoreBuilder
      */
-    public function whereIn(LaramoreBuilder $builder, LaramoreCollection $value=null,
+    public function whereIn(LaramoreBuilder $builder, Collection $value=null,
                             string $boolean='and', bool $notIn=false): LaramoreBuilder
     {
         $operator = $notIn ? Operator::equal() : Operator::different();
@@ -182,11 +182,11 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
      * Add a where not in condition from this field.
      *
      * @param  LaramoreBuilder    $builder
-     * @param  LaramoreCollection $value
+     * @param  Collection $value
      * @param  string             $boolean
      * @return LaramoreBuilder
      */
-    public function whereNotIn(LaramoreBuilder $builder, LaramoreCollection $value=null, string $boolean='and'): LaramoreBuilder
+    public function whereNotIn(LaramoreBuilder $builder, Collection $value=null, string $boolean='and'): LaramoreBuilder
     {
         return $this->whereIn($builder, $value, $boolean, true);
     }
