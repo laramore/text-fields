@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
+namespace Laramore\Fields;
 
+use Illuminate\Support\Facades\Schema;
 
 return [
 
@@ -15,25 +16,25 @@ return [
     */
 
     'configurations' => [
-        'body' => [
+        Body::class => [
             'type' => 'char',
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
         ],
-        'first_name' => [
+        FirstName::class => [
             'type' => 'first_name',
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
         ],
-        'last_name' => [
+        LastName::class => [
             'type' => 'last_name',
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
         ],
-        'name' => [
+        Name::class => [
             'type' => 'composed',
             'max_length' => (Schema::getFacadeRoot()::$defaultStringLength * 2) + 1,
             'lastname_first' => true,
             'fields' => [
-                'lastname' => Laramore\Fields\LastName::class,
-                'firstname' => Laramore\Fields\FirstName::class,
+                'lastname' => LastName::class,
+                'firstname' => FirstName::class,
             ],
             'templates' => [
                 'lastname' => 'last${name}',
@@ -48,14 +49,14 @@ return [
                 'firstname_first' => '/^${firstname} ${lastname}$/u',
             ]
         ],
-        'slug' => [
+        Slug::class => [
             'type' => 'slug',
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
         ],
-        'text_enum' => [
+        TextEnum::class => [
             'type' => 'text_enum',
         ],
-        'title' => [
+        Title::class => [
             'type' => 'title',
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
         ],
