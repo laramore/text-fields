@@ -17,19 +17,74 @@ return [
 
     'configurations' => [
         Body::class => [
-            'type' => 'char',
+            'options' => [
+                'visible', 'fillable', 'required',
+            ],
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
+            'proxy' => [
+                'configurations' => [
+                    'dry' => [
+                        'static' => true,
+                        'allow_multi' => false,
+                    ],
+                    'hydrate' => [
+                        'static' => true,
+                        'allow_multi' => false,
+                    ],
+                    'resize' => [],
+                ],
+            ],
         ],
         FirstName::class => [
-            'type' => 'first_name',
+            'options' => [
+                'visible', 'fillable', 'required', 'title',
+            ],
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
+            'proxy' => [
+                'configurations' => [
+                    'dry' => [
+                        'static' => true,
+                        'allow_multi' => false,
+                    ],
+                    'hydrate' => [
+                        'static' => true,
+                        'allow_multi' => false,
+                    ],
+                    'resize' => [],
+                ],
+            ],
+            'migration_name' => 'char',
+            'migration_property_keys' => [
+                'length:maxLength', 'nullable', 'default',
+            ],
         ],
         LastName::class => [
-            'type' => 'last_name',
+            'options' => [
+                'visible', 'fillable', 'required', 'uppercase',
+            ],
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
+            'proxy' => [
+                'configurations' => [
+                    'dry' => [
+                        'static' => true,
+                        'allow_multi' => false,
+                    ],
+                    'hydrate' => [
+                        'static' => true,
+                        'allow_multi' => false,
+                    ],
+                    'resize' => [],
+                ],
+            ],
+            'migration_name' => 'char',
+            'migration_property_keys' => [
+                'length:maxLength', 'nullable', 'default',
+            ],
         ],
         Name::class => [
-            'type' => 'composed',
+            'options' => [
+                'visible', 'fillable', 'required',
+            ],
             'max_length' => (Schema::getFacadeRoot()::$defaultStringLength * 2) + 1,
             'lastname_first' => true,
             'fields' => [
@@ -42,23 +97,68 @@ return [
             ],
             'patterns' => [ // Based also on https://www.utf8-chartable.de/.
                 // Based on https://www.compart.com/en/unicode/category/Lu.
-                'lastname' => '([A-ZÀ-ÖØ-Þ]+(?> [A-ZÀ-ÖØ-Þ]+)*)',
+                'lastname' => '([A-ZÀ-ÖØ-Þ]+(?> [A-ZÀ-ÖØ-Þ\']+)*)',
                 // https://www.compart.com/en/unicode/category/Ll.
-                'firstname' => '((?>[A-ZÀ-ÖØ-Þ][a-zß-öø-ÿ]+)(?> [A-ZÀ-ÖØ-Þc][a-zß-öø-ÿ]+)*)',
+                'firstname' => '((?>[A-ZÀ-ÖØ-Þ][a-zß-öø-ÿ\']+)(?> [A-ZÀ-ÖØ-Þc][a-zß-öø-ÿ\']+)*)',
                 'lastname_first' => '/^${lastname} ${firstname}$/u',
                 'firstname_first' => '/^${firstname} ${lastname}$/u',
             ]
         ],
         Slug::class => [
-            'type' => 'slug',
+            'options' => [
+                'visible', 'fillable', 'required', 'slug',
+            ],
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
+            'proxy' => [
+                'configurations' => [
+                    'dry' => [
+                        'static' => true,
+                        'allow_multi' => false,
+                    ],
+                    'hydrate' => [
+                        'static' => true,
+                        'allow_multi' => false,
+                    ],
+                    'resize' => [],
+                ],
+            ],
+            'migration_name' => 'char',
+            'migration_property_keys' => [
+                'length:maxLength', 'nullable', 'default',
+            ],
         ],
         TextEnum::class => [
-            'type' => 'text_enum',
+            'options' => [
+                'visible', 'fillable', 'required',
+            ],
+            'migration_name' => 'char',
+            'migration_property_keys' => [
+                'length:maxLength', 'nullable', 'default',
+            ],
+            'factory_name' => 'enum',
         ],
         Title::class => [
-            'type' => 'title',
+            'options' => [
+                'visible', 'fillable', 'required', 'title',
+            ],
             'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
+            'proxy' => [
+                'configurations' => [
+                    'dry' => [
+                        'static' => true,
+                        'allow_multi' => false,
+                    ],
+                    'hydrate' => [
+                        'static' => true,
+                        'allow_multi' => false,
+                    ],
+                    'resize' => [],
+                ],
+            ],
+            'migration_name' => 'char',
+            'migration_property_keys' => [
+                'length:maxLength', 'nullable', 'default',
+            ],
         ],
     ],
     
