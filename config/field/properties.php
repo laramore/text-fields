@@ -94,6 +94,7 @@ return [
             'firstname' => '((?>[A-ZÀ-ÖØ-Þ][a-zß-öø-ÿ]*)(?>[ \'-][A-ZÀ-ÖØ-Þc][a-zß-öø-ÿ]*)*)',
             'lastname_first' => '/^${lastname} ${firstname}$/u',
             'firstname_first' => '/^${firstname} ${lastname}$/u',
+            'flags' => null,
         ]
     ],
     Slug::class => [

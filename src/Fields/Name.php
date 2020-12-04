@@ -45,6 +45,13 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
     protected $maxLength;
 
     /**
+     * Patterns for names.
+     *
+     * @var array
+     */
+    protected $patterns;
+
+    /**
      * Indicate if the field has a value.
      *
      * @param LaramoreModel|array|\ArrayAccess $model
@@ -107,11 +114,11 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
      */
     public function getPattern(): string
     {
-        $template = $this->getConfig($this->lastnameFirst ? 'patterns.lastname_first' : 'patterns.firstname_first');
+        $template = $this->patterns[$this->lastnameFirst ? 'lastname_first' : 'firstname_first'];
 
         return Str::replaceInTemplate($template, [
-            'lastname' => $this->getConfig('patterns.lastname'),
-            'firstname' => $this->getConfig('patterns.firstname'),
+            'lastname' => $this->patterns['lastname'],
+            'firstname' => $this->patterns['firstname'],
         ]);
     }
 
@@ -122,7 +129,7 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
      */
     public function getPatternFlags()
     {
-        return $this->getConfig('patterns.flags');
+        return $this->patterns['flags'];
     }
 
     /**
