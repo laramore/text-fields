@@ -116,12 +116,12 @@ class Body extends Char
      * Resize a text value.
      *
      * @param string       $value
-     * @param integer|null $length
+     * @param int|null     $length
      * @param string       $delimiter
      * @param string       $toAdd     If the value is resized.
      * @return string
      */
-    public function resize(string $value, integer $length=null, string $delimiter='', string $toAdd=''): string
+    public function resize(string $value, int $length=null, string $delimiter='', string $toAdd=''): string
     {
         $parts = $delimiter === '' ? str_split($value) : explode($delimiter, $value);
         $valides = [];

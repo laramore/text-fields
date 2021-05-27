@@ -45,9 +45,9 @@ return [
         ],
     ],
     TextEnum::class => [
-        'type' => 'enum',
+        'type' => 'char',
         'property_keys' => [
-            'allowed:values', 'length:maxLength', 'nullable', 'default:defaultValue',
+            'length:maxLength', 'nullable', 'default:defaultValue',
         ],
     ],
     Title::class => [

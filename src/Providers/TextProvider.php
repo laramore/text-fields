@@ -33,11 +33,19 @@ class TextProvider extends ServiceProvider
         );
 
         $this->mergeConfigFrom(
+            __DIR__."/../../config/field/validations.php", "field.validations",
+        );
+
+        $this->mergeConfigFrom(
             __DIR__."/../../config/field/factories.php", "field.factories",
         );
 
         $this->mergeConfigFrom(
-            __DIR__."/../../config/option.php", "option",
+            __DIR__."/../../config/option/elements.php", "option.elements",
+        );
+
+        $this->mergeConfigFrom(
+            __DIR__."/../../config/option/validations.php", "option.validations",
         );
     }
 }

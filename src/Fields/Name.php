@@ -40,7 +40,7 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
     /**
      * Define the max length.
      *
-     * @var integer
+     * @var int
      */
     protected $maxLength;
 

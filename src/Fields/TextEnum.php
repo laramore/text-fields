@@ -17,14 +17,14 @@ class TextEnum extends Enum
      * Max length.
      * Can be calculated
      *
-     * @var integer
+     * @var int
      */
     protected $maxLength;
 
     /**
      * Define the max length for this field.
      *
-     * @param integer $maxLength
+     * @param int $maxLength
      *
      * @return self
      */
