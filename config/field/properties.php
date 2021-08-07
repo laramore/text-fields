@@ -17,61 +17,22 @@ return [
 
     Body::class => [
         'options' => [
-            'visible', 'fillable', 'required',
+            'select', 'visible', 'fillable', 'required',
         ],
         'separator' => '-',
         'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
-        'proxy' => [
-            'configurations' => [
-                'dry' => [
-                    'static' => true,
-                    'allow_multi' => false,
-                ],
-                'hydrate' => [
-                    'static' => true,
-                    'allow_multi' => false,
-                ],
-                'resize' => [],
-            ],
-        ],
     ],
     FirstName::class => [
         'options' => [
-            'visible', 'fillable', 'required', 'title',
+            'select', 'visible', 'fillable', 'required', 'title',
         ],
         'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
-        'proxy' => [
-            'configurations' => [
-                'dry' => [
-                    'static' => true,
-                    'allow_multi' => false,
-                ],
-                'hydrate' => [
-                    'static' => true,
-                    'allow_multi' => false,
-                ],
-                'resize' => [],
-            ],
-        ],
     ],
     LastName::class => [
         'options' => [
-            'visible', 'fillable', 'required', 'uppercase',
+            'select', 'visible', 'fillable', 'required', 'uppercase',
         ],
         'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
-        'proxy' => [
-            'configurations' => [
-                'dry' => [
-                    'static' => true,
-                    'allow_multi' => false,
-                ],
-                'hydrate' => [
-                    'static' => true,
-                    'allow_multi' => false,
-                ],
-                'resize' => [],
-            ],
-        ],
     ],
     Name::class => [
         'options' => [
@@ -99,27 +60,20 @@ return [
     ],
     Slug::class => [
         'options' => [
-            'visible', 'fillable', 'required', 'slug',
+            'select', 'visible', 'fillable', 'required', 'slug',
         ],
         'separator' => '-',
         'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
-        'proxy' => [
-            'configurations' => [
-                'dry' => [
-                    'static' => true,
-                    'allow_multi' => false,
-                ],
-                'hydrate' => [
-                    'static' => true,
-                    'allow_multi' => false,
-                ],
-                'resize' => [],
-            ],
+    ],
+    Hexadecimal::class => [
+        'options' => [
+            'select', 'visible', 'fillable', 'required', 'lowercase',
         ],
+        'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
     ],
     TextEnum::class => [
         'options' => [
-            'visible', 'fillable', 'required',
+            'select', 'visible', 'fillable', 'required',
         ],
         'migration_name' => 'char',
         'migration_property_keys' => [
@@ -128,22 +82,9 @@ return [
     ],
     Title::class => [
         'options' => [
-            'visible', 'fillable', 'required', 'title',
+            'select', 'visible', 'fillable', 'required', 'title',
         ],
         'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
-        'proxy' => [
-            'configurations' => [
-                'dry' => [
-                    'static' => true,
-                    'allow_multi' => false,
-                ],
-                'hydrate' => [
-                    'static' => true,
-                    'allow_multi' => false,
-                ],
-                'resize' => [],
-            ],
-        ],
     ],
-    
+
 ];

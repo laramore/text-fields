@@ -29,11 +29,14 @@ return [
     Slug::class => [
         'formater' => 'slug',
     ],
+    Hexadecimal::class => [
+        'formater' => 'hexadecimal',
+    ],
     TextEnum::class => [
         'formater' => 'randomElement',
     ],
     Title::class => [
         'formater' => 'catchPhrase',
     ],
-    
+
 ];

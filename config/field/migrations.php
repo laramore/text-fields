@@ -44,6 +44,12 @@ return [
             'length:maxLength', 'nullable', 'default',
         ],
     ],
+    Hexadecimal::class => [
+        'type' => 'char',
+        'property_keys' => [
+            'length:maxLength', 'nullable', 'default',
+        ],
+    ],
     TextEnum::class => [
         'type' => 'char',
         'property_keys' => [
@@ -56,5 +62,5 @@ return [
             'length:maxLength', 'nullable', 'default',
         ],
     ],
-    
+
 ];

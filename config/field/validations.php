@@ -1,6 +1,6 @@
 <?php
 
-namespace Laramore\Fields;
+namespace Laramore;
 
 
 return [
@@ -14,26 +14,30 @@ return [
     |
     */
 
-    Body::class => [
+    Fields\Body::class => [
+        Validations\Text::class,
+    ],
+    Fields\FirstName::class => [
+        Validations\Text::class,
+    ],
+    Fields\LastName::class => [
+        Validations\Text::class,
+    ],
+    Fields\Name::class => [
+        Validations\Text::class,
+        Validations\Pattern::class,
+    ],
+    Fields\Slug::class => [
+        Validations\Text::class,
+    ],
+    Fields\Hexadecimal::class => [
+        Validations\Pattern::class,
+    ],
+    Fields\TextEnum::class => [
+        Validations\Exists::class,
+    ],
+    Fields\Title::class => [
+        Validations\Text::class,
+    ],
 
-    ],
-    FirstName::class => [
-
-    ],
-    LastName::class => [
-
-    ],
-    Name::class => [
-        \Laramore\Validations\Pattern::class => [],
-    ],
-    Slug::class => [
-
-    ],
-    TextEnum::class => [
-
-    ],
-    Title::class => [
-
-    ],
-    
 ];
