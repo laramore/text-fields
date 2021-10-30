@@ -12,4 +12,8 @@ namespace Laramore\Fields;
 
 class FirstName extends Body
 {
+    public function get($model)
+    {
+        return $this->getOwner()->getFieldValue($this, $model);
+    }
 }

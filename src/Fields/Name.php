@@ -19,17 +19,11 @@ use Laramore\Contracts\{
 };
 use Laramore\Elements\OperatorElement;
 use Laramore\Facades\Operator;
-use Laramore\Traits\Field\{
-    ModelExtra, IndexableConstraints
-};
+use Laramore\Traits\Field\IndexableConstraints;
 
 class Name extends BaseComposed implements ExtraField, PatternField, IndexableField
 {
-    use ModelExtra, IndexableConstraints {
-        ModelExtra::set as protected setValue;
-        ModelExtra::reset as protected resetValue;
-    }
-
+    use IndexableConstraints;
     /**
      * Structure with the last name in first.
      *
@@ -142,9 +136,9 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
      */
     public function whereNull(LaramoreBuilder $builder, string $boolean='and', bool $not=false): LaramoreBuilder
     {
-        $builder = $this->getField('firstname')->addBuilderOperation($builder, 'whereNull', null, $boolean, $not);
+        $builder = $this->getField('firstname')->whereNull($builder, $boolean, $not);
 
-        return $this->getField('lastname')->addBuilderOperation($builder, 'whereNull', $boolean, $not);
+        return $this->getField('lastname')->whereNull($builder, $boolean, $not);
     }
 
     /**
@@ -178,8 +172,8 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
                 [$lastname, $firstname] = $this->split($name);
 
                 $builder->where(function ($subBuilder) use ($lastname, $firstname, $operator) {
-                    $this->getField('lastname')->addBuilderOperation($subBuilder, 'where', $operator, $lastname, 'and');
-                    $this->getField('firstname')->addBuilderOperation($subBuilder, 'where', $operator, $firstname, 'and');
+                    $this->getField('lastname')->where($subBuilder, $operator, $lastname, 'and');
+                    $this->getField('firstname')->where($subBuilder, $operator, $firstname, 'and');
                 }, $notIn ? 'and' : 'or');
             }
         }, $boolean);
@@ -212,9 +206,9 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
     {
         [$lastname, $firstname] = $this->split($value);
 
-        return $builder->where(function ($subBuilder) use ($lastname, $firstname) {
-            $this->getField('lastname')->addBuilderOperation($subBuilder, 'where', $lastname, 'and');
-            $this->getField('firstname')->addBuilderOperation($subBuilder, 'where', $firstname, 'and');
+        return $builder->where(function ($subBuilder) use ($operator, $lastname, $firstname) {
+            $this->getField('lastname')->where($subBuilder, $operator, $lastname, 'and');
+            $this->getField('firstname')->where($subBuilder, $operator, $firstname, 'and');
         }, $boolean);
     }
 
@@ -227,12 +221,16 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
      */
     public function set($model, $value)
     {
-        [$lastname, $firstname] = $this->split($value);
+        if (empty($value)) {
+            $value = $lastname = $firstname = null;
+        } else {
+            [$lastname, $firstname] = $this->split($value);
+        }
 
         $this->getField('lastname')->set($model, $lastname);
         $this->getField('firstname')->set($model, $firstname);
 
-        return $this->setValue($model, $value);
+        return parent::set($model, $value);
     }
 
     /**
@@ -246,29 +244,25 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
         $this->getField('lastname')->reset($model);
         $this->getField('firstname')->reset($model);
 
-        if ($this->hasDefault()) {
-            return $this->setValue($model, $this->getDefault());
-        }
-
-        return $this->resetValue($model);
+        return parent::reset($model);
     }
 
     /**
-     * Retrieve the value definied by the field.
+     * Resolve the value definied by the field.
      *
      * @param LaramoreModel|array|\ArrayAccess $model
      * @return mixed
      */
-    public function retrieve($model)
+    public function resolve($model)
     {
-        $lastname = $this->getField('lastname')->get($model);
-        $firstname = $this->getField('firstname')->get($model);
+        $firstname = $this->getField('firstname');
+        $lastname = $this->getField('lastname');
 
-        if (\is_null($lastname) || \is_null($firstname)) {
+        if (! $firstname->has($model) && ! $lastname->has($model)) {
             return null;
         }
 
-        return $this->join($lastname, $firstname);
+        return $this->join($lastname->get($model), $firstname->get($model));
     }
 
     /**
@@ -281,11 +275,9 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
      */
     public function setFieldValue(Field $field, $model, $value)
     {
-        $result = parent::setFieldValue($field, $model, $value);
+        parent::reset($model);
 
-        $this->setValue($model, $this->retrieve($model));
-
-        return $result;
+        return parent::setFieldValue($field, $model, $value);
     }
 
     /**
@@ -310,16 +302,19 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
      *
      * @param string $lastname
      * @param string $firstname
-     * @return string
+     * @return string|null
      */
-    public function join(string $lastname, string $firstname): string
+    public function join(string $lastname=null, string $firstname=null)
     {
+        if (\is_null($lastname) || \is_null($firstname)) {
+            return null;
+        }
+
         if ($this->lastnameFirst) {
             return $lastname.' '.$firstname;
         }
 
         return $firstname.' '.$lastname;
-
     }
 
     /**
