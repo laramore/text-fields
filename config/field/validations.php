@@ -27,7 +27,7 @@ return [
         Validations\Text::class,
         Validations\Pattern::class,
     ],
-    Fields\Hexadecimal::class => [
+    Fields\Pattern::class => [
         Validations\Text::class,
         Validations\Pattern::class,
     ],
