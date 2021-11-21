@@ -26,6 +26,9 @@ return [
     Name::class => [
         'formater' => null,
     ],
+    Pattern::class => [
+        'formater' => 'char',
+    ],
     Slug::class => [
         'formater' => 'slug',
     ],

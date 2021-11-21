@@ -32,6 +32,12 @@ return [
             'length:maxLength', 'nullable', 'default',
         ],
     ],
+    Pattern::class => [
+        'type' => 'char',
+        'property_keys' => [
+            'length:maxLength', 'nullable', 'default',
+        ],
+    ],
     Name::class => [
         'type' => 'char',
         'property_keys' => [

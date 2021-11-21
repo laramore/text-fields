@@ -27,10 +27,15 @@ return [
         Validations\Text::class,
         Validations\Pattern::class,
     ],
+    Fields\Hexadecimal::class => [
+        Validations\Text::class,
+        Validations\Pattern::class,
+    ],
     Fields\Slug::class => [
         Validations\Text::class,
     ],
     Fields\Hexadecimal::class => [
+        Validations\Pattern::class,
         Validations\Pattern::class,
     ],
     Fields\TextEnum::class => [

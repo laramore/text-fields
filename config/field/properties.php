@@ -58,6 +58,12 @@ return [
             'flags' => null,
         ]
     ],
+    Pattern::class => [
+        'options' => [
+            'select', 'visible', 'fillable', 'required', 'uppercase',
+        ],
+        'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
+    ],
     Slug::class => [
         'options' => [
             'select', 'visible', 'fillable', 'required', 'slug',
