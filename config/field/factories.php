@@ -15,7 +15,7 @@ return [
     */
 
     Body::class => [
-        'formater' => 'char',
+        'formater' => 'sentence',
     ],
     FirstName::class => [
         'formater' => 'firstname',
@@ -27,7 +27,7 @@ return [
         'formater' => null,
     ],
     Pattern::class => [
-        'formater' => 'char',
+        'formater' => 'sentence',
     ],
     Slug::class => [
         'formater' => 'slug',
