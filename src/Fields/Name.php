@@ -127,6 +127,20 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
     }
 
     /**
+     * If no max length defined, get it from schema.
+     *
+     * @return void
+     */
+    protected function locking()
+    {
+        parent::locking();
+
+        if (is_null($this->maxLength)) {
+            $this->maxLength = $this->getField('lastname')->maxLength + $this->getField('firstname')->maxLength + 1;
+        }
+    }
+
+    /**
      * Add a where null condition from this field.
      *
      * @param  LaramoreBuilder $builder

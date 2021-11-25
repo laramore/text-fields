@@ -20,25 +20,21 @@ return [
             'select', 'visible', 'fillable', 'required',
         ],
         'separator' => '-',
-        'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
     ],
     FirstName::class => [
         'options' => [
             'select', 'visible', 'fillable', 'required', 'title',
         ],
-        'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
     ],
     LastName::class => [
         'options' => [
             'select', 'visible', 'fillable', 'required', 'uppercase',
         ],
-        'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
     ],
     Name::class => [
         'options' => [
             'visible', 'fillable', 'required',
         ],
-        'max_length' => (Schema::getFacadeRoot()::$defaultStringLength * 2) + 1,
         'lastname_first' => true,
         'fields' => [
             'lastname' => LastName::class,
@@ -62,20 +58,17 @@ return [
         'options' => [
             'select', 'visible', 'fillable', 'required', 'uppercase',
         ],
-        'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
     ],
     Slug::class => [
         'options' => [
             'select', 'visible', 'fillable', 'required', 'slug',
         ],
         'separator' => '-',
-        'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
     ],
     Hexadecimal::class => [
         'options' => [
             'select', 'visible', 'fillable', 'required', 'lowercase',
         ],
-        'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
     ],
     TextEnum::class => [
         'options' => [
@@ -90,7 +83,6 @@ return [
         'options' => [
             'select', 'visible', 'fillable', 'required', 'title',
         ],
-        'max_length' => Schema::getFacadeRoot()::$defaultStringLength,
     ],
 
 ];
