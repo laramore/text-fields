@@ -19,28 +19,27 @@ class TextEnum extends Enum
      *
      * @var int
      */
-    protected $maxLength;
+    protected $length;
 
     /**
      * Define the max length for this field.
      *
-     * @param int $maxLength
+     * @param int $length
      *
      * @return self
      */
-    public function maxLength(int $maxLength)
+    public function length(int $length)
     {
         $this->needsToBeUnlocked();
 
-        if ($maxLength <= 0) {
+        if ($length <= 0) {
             throw new \Exception('The max length must be a positive number');
         }
 
-        $this->defineProperty('maxLength', $maxLength);
+        $this->defineProperty('length', $length);
 
         return $this;
     }
-
     /**
      * During locking, define the max length if it is not.
      *
@@ -50,8 +49,8 @@ class TextEnum extends Enum
     {
         parent::locking();
 
-        if (\is_null($this->maxLength)) {
-            $this->maxLength = \array_reduce($this->elements->all(), function ($length, $element) {
+        if (\is_null($this->length)) {
+            $this->length = \array_reduce($this->elements->all(), function ($length, $element) {
                 return ($length < ($newLenght = \strlen($element->getName()))) ? $newLenght : $length;
             }, 0);
         }

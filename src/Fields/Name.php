@@ -36,7 +36,7 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
      *
      * @var int
      */
-    protected $maxLength;
+    protected $length;
 
     /**
      * Patterns for names.
@@ -135,8 +135,8 @@ class Name extends BaseComposed implements ExtraField, PatternField, IndexableFi
     {
         parent::locking();
 
-        if (is_null($this->maxLength)) {
-            $this->maxLength = $this->getField('lastname')->maxLength + $this->getField('firstname')->maxLength + 1;
+        if (is_null($this->length)) {
+            $this->length = $this->getField('lastname')->length + $this->getField('firstname')->length + 1;
         }
     }
 

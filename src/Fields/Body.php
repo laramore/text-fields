@@ -46,7 +46,7 @@ class Body extends Char
             $value = $this->slug($value);
         }
 
-        if ($this->maxLength < \strlen($value) && !\is_null($value)) {
+        if ($this->length < \strlen($value) && !\is_null($value)) {
             $dots = $this->hasOption(Option::dotsOnResize()) ? '...' : '';
 
             if ($this->hasOption(Option::caracterResize())) {
@@ -125,7 +125,7 @@ class Body extends Char
     {
         $parts = $delimiter === '' ? str_split($value) : explode($delimiter, $value);
         $valides = [];
-        $length = (($length ?: $this->maxLength) - strlen($toAdd));
+        $length = (($length ?: $this->length) - strlen($toAdd));
 
         foreach ($parts as $part) {
             if (strlen($part) <= $length) {

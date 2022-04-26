@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8825a3d6285d653e53e18694f75f5bc1",
+    "content-hash": "97305e991fd6fca53deb0ce64553167f",
     "packages": [
         {
             "name": "brick/math",
@@ -430,16 +430,16 @@
         },
         {
             "name": "laramore/laramore",
-            "version": "v0.28.2",
+            "version": "v0.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laramore/laramore.git",
-                "reference": "d2a9792f22a89b7dbefee285c8032e91380cad06"
+                "reference": "2607ca446221fceb4bec7ae3b5c5679564ce5fd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laramore/laramore/zipball/d2a9792f22a89b7dbefee285c8032e91380cad06",
-                "reference": "d2a9792f22a89b7dbefee285c8032e91380cad06",
+                "url": "https://api.github.com/repos/laramore/laramore/zipball/2607ca446221fceb4bec7ae3b5c5679564ce5fd8",
+                "reference": "2607ca446221fceb4bec7ae3b5c5679564ce5fd8",
                 "shasum": ""
             },
             "require": {
@@ -503,9 +503,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laramore/laramore/issues",
-                "source": "https://github.com/laramore/laramore/tree/v0.28.2"
+                "source": "https://github.com/laramore/laramore/tree/v0.31.0"
             },
-            "time": "2021-11-25T19:15:02+00:00"
+            "time": "2022-04-24T09:09:42+00:00"
         },
         {
             "name": "laravel/framework",

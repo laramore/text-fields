@@ -17,55 +17,55 @@ return [
     Body::class => [
         'type' => 'char',
         'property_keys' => [
-            'length:maxLength', 'nullable', 'default',
+            'length', 'nullable', 'default',
         ],
     ],
     FirstName::class => [
         'type' => 'char',
         'property_keys' => [
-            'length:maxLength', 'nullable', 'default',
+            'length', 'nullable', 'default',
         ],
     ],
     LastName::class => [
         'type' => 'char',
         'property_keys' => [
-            'length:maxLength', 'nullable', 'default',
+            'length', 'nullable', 'default',
         ],
     ],
     Pattern::class => [
         'type' => 'char',
         'property_keys' => [
-            'length:maxLength', 'nullable', 'default',
+            'length', 'nullable', 'default',
         ],
     ],
     Name::class => [
         'type' => 'char',
         'property_keys' => [
-            'length:maxLength', 'nullable', 'default',
+            'length', 'nullable', 'default',
         ],
     ],
     Slug::class => [
         'type' => 'char',
         'property_keys' => [
-            'length:maxLength', 'nullable', 'default',
+            'length', 'nullable', 'default',
         ],
     ],
     Hexadecimal::class => [
         'type' => 'char',
         'property_keys' => [
-            'length:maxLength', 'nullable', 'default',
+            'length', 'nullable', 'default',
         ],
     ],
     TextEnum::class => [
         'type' => 'char',
         'property_keys' => [
-            'length:maxLength', 'nullable', 'default:defaultValue',
+            'length', 'nullable', 'default:defaultValue',
         ],
     ],
     Title::class => [
         'type' => 'char',
         'property_keys' => [
-            'length:maxLength', 'nullable', 'default',
+            'length', 'nullable', 'default',
         ],
     ],
 

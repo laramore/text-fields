@@ -76,7 +76,7 @@ return [
         ],
         'migration_name' => 'char',
         'migration_property_keys' => [
-            'length:maxLength', 'nullable', 'default',
+            'length', 'nullable', 'default',
         ],
     ],
     Title::class => [
