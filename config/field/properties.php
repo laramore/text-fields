@@ -74,10 +74,6 @@ return [
         'options' => [
             'select', 'visible', 'fillable', 'required',
         ],
-        'migration_name' => 'char',
-        'migration_property_keys' => [
-            'length', 'nullable', 'default',
-        ],
     ],
     Title::class => [
         'options' => [
